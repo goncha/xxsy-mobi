@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="author" content="{{ author }}" />
+    <title>{{ title }}</title>
+  </head>
+  <body>
+    <h1>{{ title }}</h1>
+    <h2 id="toc">目录</h2>
+    <ul>
+      {% for ch in chapters %}
+      <li><a href="#ch{{ loop.index }}">{{ ch.title|e }}</a></li>
+      {% endfor %}
+    </ul>
+    {% for ch in chapters %}
+    <div>
+    <h2 id="ch{{ loop.index }}">{{ ch.title|e }}</h2>
+    <h4><a href="#toc">回到目录</a></h4>
+    {{ ch.content }}
+    </div>
+    {% endfor %}
+  </body>
+</html>
