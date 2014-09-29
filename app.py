@@ -1,5 +1,15 @@
 # -*- coding: utf-8 -*-
 
+from urllib2 import urlopen, Request
+
+def fetch_html(url):
+    req = Request(url)
+    req.add_header('user-agent', 'Mozilla/5.0 (X11; Linux x86_64; rv:29.0) Gecko/20100101 Firefox/29.0')
+    resp = urlopen(req, None, 10)
+    if resp.code != 200:
+        raise "HTTP " + resp.code
+    return resp
+
 
 if __name__ == '__main__':
     from lxml.html import parse as parse_html
@@ -17,7 +27,7 @@ if __name__ == '__main__':
 
     data = {}
 
-    toc_doc = parse_html(url)
+    toc_doc = parse_html(fetch_html(url))
 
     title_el = toc_doc.xpath('//div[@id="ct_title"]/h1')[0]
     data['title'] = title_el.text
@@ -34,7 +44,7 @@ if __name__ == '__main__':
         print 'Fetching', ch_url
         ch_data = {}
         ch_data['title'] = el.text
-        ch_doc = parse_html(base_url + '/' + ch_url)
+        ch_doc = parse_html(fetch_html(base_url + '/' + ch_url))
         ch_data['content'] = ''.join([tostring_html(p) for p in ch_doc.xpath('//div[@id="zjcontentdiv"]/p')])
         chapters.append(ch_data)
 
